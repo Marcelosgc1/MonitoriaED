@@ -29,7 +29,7 @@ int insert(struct node **head, int n){
     }else{
         while (aux->next)
         {
-            printf("rola");
+            printf("próximo da lista...");
             if (aux->numero<new->numero && aux->next->numero>new->numero){
                 new->next = aux->next;
                 aux->next = new;
