@@ -6,7 +6,7 @@ typedef struct node{
     struct node *next;
 }node;
 
-int printteste(struct node **head){
+int impressaoDaLista(struct node **head){
     struct node *aux = *head;
     while (aux->next)
     {
@@ -20,28 +20,31 @@ int printteste(struct node **head){
 int insert(struct node **head, int n){
     struct node *aux = *head;
     struct node *new = malloc(sizeof(struct node));
-    int flag=0;
     new->numero = n;
-    
+    new->next = NULL;
+
+
     if (*head==NULL){
         *head=new;
-        new->next = NULL;
-    }else{
-        while (aux->next)
-        {
-            printf("próximo da lista...");
-            if (aux->numero<new->numero && aux->next->numero>new->numero){
-                new->next = aux->next;
-                aux->next = new;
-                flag=1;
-                break;
-            }
-            aux = aux->next;
-        }
-        if (flag==0){aux->next = new;}
+        return 0;
     }
-    printf("%d\n", aux->numero);
 
+    if (new->numero<=aux->numero){
+        new->next = aux;
+        *head = new;
+        return 0;
+    }
+
+    while (aux->next)
+    {
+        if (new->numero<=aux->next->numero){
+            new->next = aux->next;
+            aux->next = new;
+            return 0;
+        }
+        aux = aux->next;
+    }
+    aux->next = new;
     return 0;
 
 };
@@ -57,13 +60,11 @@ int main(){
     while (n>0)
     {
         insert(&head, n);
+        printf("Escreva um numero: \n");
         scanf("%d", &n);        
     }
     
-    printteste(&head);
-    
-    
-
+    impressaoDaLista(&head);
 
     return 0;
 }
