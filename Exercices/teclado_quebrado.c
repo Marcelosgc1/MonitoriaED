@@ -22,7 +22,7 @@ int impressaoDaLista(queue *q){
     return 0;
 }
 
-void iwanttobreakfree(queue *q){
+void killList(queue *q){
     while (q->head){
         q->atual=q->head;
         q->head=q->head->next;
@@ -33,7 +33,7 @@ void iwanttobreakfree(queue *q){
 }
 
 
-void insert_atual(queue* q, char c, int v){
+void insertAtual(queue* q, char c, int v){
     node* new = malloc(sizeof(node));
     new->c = c;
     new->next = NULL;
@@ -63,16 +63,15 @@ void insert_atual(queue* q, char c, int v){
 
 
 int main(){
-    char c[1000];
+    char c[1001];
     queue q;
     int variavel=0;
     q.head=NULL;
     q.last=NULL;
     q.atual=NULL;
     int i=0;
-    scanf("%s", c);
-    while(c[i] != EOF){
-        if (c[i]!='\0'){
+    while(scanf("%s", c) != EOF){
+        while (c[i]!='\0'){
             if (c[i]=='['){
                 q.atual=q.head;
                 variavel=1;
@@ -80,18 +79,15 @@ int main(){
                 q.atual=q.last;
                 variavel=0;
             }else{
-                insert_atual(&q, c[i], variavel);
+                insertAtual(&q, c[i], variavel);
                 variavel=0;
             }
             i++;
-        }else{
-            impressaoDaLista(&q);
-            printf("\n");
-            i=0;
-            iwanttobreakfree(&q);
-            c[0]='\0';
-            scanf("%s", c);
         }
+        impressaoDaLista(&q);
+        printf("\n");
+        i=0;
+        killList(&q);        
     }
   return 0;
 }
