@@ -42,52 +42,49 @@ void insertAtual(queue* q, char c, int v){
         if (v){
             new->next=q->head;
             q->head=new;
-            q->atual=new;
         }else if(q->last==q->atual){
             q->atual->next = new;
-            q->atual=new;
             q->last=new;
             
         }else{
             new->next=q->atual->next;
             q->atual->next=new;
-            q->atual=new;
         }
     }else{
         q->head = new;
         q->last = new;
-        q->atual = new;
     }
+    q->atual=new;
     
 }
 
 
 int main(){
-    char c[1001];
+    char c;
     queue q;
     int variavel=0;
+    
     q.head=NULL;
     q.last=NULL;
     q.atual=NULL;
-    int i=0;
-    while(scanf("%s", c) != EOF){
-        while (c[i]!='\0'){
-            if (c[i]=='['){
+    
+    while((c=getchar()) != EOF){
+        if (c!='\n'){
+            if (c=='['){
                 q.atual=q.head;
                 variavel=1;
-            }else if (c[i]==']'){
+            }else if (c==']'){
                 q.atual=q.last;
                 variavel=0;
             }else{
-                insertAtual(&q, c[i], variavel);
+                insertAtual(&q, c, variavel);
                 variavel=0;
             }
-            i++;
-        }
+        }else{
         impressaoDaLista(&q);
         printf("\n");
-        i=0;
-        killList(&q);        
+        killList(&q);   
+        }     
     }
-  return 0;
+    return 0;
 }
