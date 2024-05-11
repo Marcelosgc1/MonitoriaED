@@ -7,38 +7,39 @@ typedef struct node{
     struct node *next;
 }node;
 
-typedef struct priority_queue{
-    node *head;
-}p_queue;
-
-void insert_priority_queue(int n, p_queue *q, int priority){
-    node *aux = q->head;
+void insert_priority_queue(int n, node **head, int priority){
+    node *aux = (*head);
     node *new = malloc(sizeof(node));
     new->num = n;
     new->priority = priority;
     new->next = NULL;
 
-    if(q->head == NULL){
-        q->head = new;
+    if(*head == NULL){
+        *head = new;
         return;
     }
     while(aux->next && aux->next->priority >= new->priority){
         aux = aux->next;
     }
-    new->next = aux->next;
-    aux->next = new;
+    if (aux==(*head) && aux->priority > (*head)->priority){
+        new->next=(*head);
+        (*head)=new;
+    }else{
+        new->next = aux->next;
+        aux->next = new;
+    }
 }
 
-void pop(p_queue *q){
-    node *aux = q->head;
-    if (q->head) {
-        q->head = q->head->next;
+void pop(node**head){
+    node *aux = *head;
+    if (*head) {
+        *head = (*head)->next;
         free(aux);
     }
 }
 
-int top(p_queue *q){
-    return q->head->num;
+int top(node**head){
+    return (*head)->num;
 }
 
 int main(){
