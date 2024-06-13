@@ -1,0 +1,153 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node{
+  struct node *left;
+  struct node* right;
+  struct node* parent;
+  char c;
+
+}node;
+
+
+void busca(char c, node** root){
+  if(*root){
+    if (c==(*root)->c){
+    printf("%c existe\n", c);
+    return;
+    }
+    if (c>(*root)->c){
+      busca(c, &((*root)->right));
+      return;
+    }
+    busca(c, &((*root)->left));
+    return;
+  }
+  printf("%c nao existe\n", c);
+}
+
+
+
+void insert(char c, node** root){
+  node *new=malloc(sizeof(node));
+  new->parent=NULL;
+  new->left=NULL;
+  new->right=NULL;
+  new->c = c;
+
+  if(*root==NULL){
+    *root=new;
+    return;
+
+  }
+  node *aux = *root;
+  while(aux->left || aux->right){
+    if(aux->c > new->c){
+      if (aux->left){
+      aux=aux->left;}
+      else{
+        aux->left=new;
+        new->parent = aux;
+        return;
+      }
+    }
+    else{
+      if (aux->right){
+        aux=aux->right;
+      }
+        else{
+          aux->right=new;
+          new->parent = aux;
+          return;}
+    }
+  }
+  if(aux->c > new->c){
+    aux->left=new;
+    new->parent=aux;
+  }else{
+    aux->right=new;
+    new->parent=aux;
+  }
+}
+
+
+void prefixo(node**a, int *flag_do_print){
+  if ((*a)){
+    if ((*flag_do_print)==1){
+      printf("%c", (*a)->c);
+      (*flag_do_print)=0;
+    }
+    else{
+      printf(" %c", (*a)->c);
+    }
+    prefixo(&((*a)->left), flag_do_print);
+    prefixo(&((*a)->right), flag_do_print);
+
+  }
+}
+
+void infixo(node**a, int *flag_do_print){
+  if ((*a)){
+    
+    infixo(&((*a)->left), flag_do_print);
+    if ((*flag_do_print)==1){
+      printf("%c", (*a)->c);
+      (*flag_do_print)=0;
+    }
+    else{
+      printf(" %c", (*a)->c);
+    }
+    infixo(&((*a)->right), flag_do_print);
+
+  }
+}
+void posfixo(node**a, int*flag_do_print){
+  if ((*a)){
+    
+    posfixo(&((*a)->left), flag_do_print);
+    posfixo(&((*a)->right), flag_do_print);
+    if ((*flag_do_print)==1){
+      printf("%c", (*a)->c);
+      (*flag_do_print)=0;
+    }
+    else{
+      printf(" %c", (*a)->c);
+    }
+  }
+}
+
+int main(void) {
+  char str[20];
+  char c;
+  int *num=malloc(sizeof(int));
+  (*num)=1;
+  node *root=NULL;  
+
+  while(fgets(str, sizeof(str), stdin) != NULL){
+    (*num)=1;
+
+    if (str[0]=='P' && str[1]=='R'){
+      prefixo(&root, num);
+      printf("\n");
+    }
+    else if (str[0]=='P' && str[1]=='O'){
+      posfixo(&root, num);
+      printf("\n");
+    }
+    else if (str[0]=='I' && str[1]=='N'){
+      infixo(&root, num);
+      printf("\n");
+    }
+    else if (str[0]=='I'){
+      c=str[2];
+      insert(c, &root);
+    }
+    else if (str[0]=='P'){
+      c=str[2];
+      busca(c, &root);
+    }
+    
+  }
+
+  return 0;
+}
